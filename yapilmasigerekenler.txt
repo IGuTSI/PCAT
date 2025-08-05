@@ -1,0 +1,996 @@
+First, create a new repository on GitHub and open the terminal (CMD).
+and go to the CMD
+
+CMD
+First-step
+*
+echo "# CleanBlog" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/your git.hub nickname/CleanBlog.git
+git push -u origin main
+*
+
+and process completed.
+
+--NEXT 
+ctrl+shift+p and go to the prettier:Create
+
+--NEXT
+
+Terminal in VSCODE
+First step
+- npm init     * because we need package.json
+*and answer the questions*
+
+Second-Step
+npm install prettier -D --save-exact (same prettier version dowloand)
+
+Third-Step
+and go to the prettier file and use this:
+"semi": true (her bitişte noktali virgün kullanır.)
+"singleQuote": true,  (tek tırnak şekilde kullanılmasını ister)
+"trailingComma": "es5" (ayarının da es5 ŞEKLİNDE varsayılan şekilde olmasını istiyoruz.)
+
+Fourth-Step 
+Create .gitignore file in the CleanBlog folders with VSCODE and search gitignore in google. Join this page and write Node , select this and Load, later Copy all page and paste your .gitignore file on vscode
+
+***Why are we use gitignore ? 
+Because we need dont share private info. we dont need unnecessary info. we need trying to keep the storage area clean.
+
+Fifth-Step
+write Terminal 'git status'  (**we need save changes files)
+'git add .' (**We want it to add all the files to git.)
+
+and write           git commit -m "Workspace created" 
+and last-step       git push     (**send to conciliator.)
+
+
+
+
+PART-2  EXPRESS AND NODEMON
+
+dowloand
+npm i express --save
+
+and npm install --save-dev nodemon 
+
+and join package.json file and add new script in "start": "nodemon app.js"
+
+next-step 
+write app.js
+
+const express = require('express');
+
+const app = express();
+
+app.get('/', (req, res) => {
+
+  const photo = {
+    id: 1,
+    name: "Photo Name",
+    description: "Photo description"
+  }
+  res.send(photo)
+})
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Sunucu ${port} portunda başlatıldı..`);
+});
+
+Afterwards, we can send our codes to the remote repo with the git push command.
+write Terminal 'git status'  (**we need save changes files)
+'git add .' (**We want it to add all the files to git.)
+
+and write           git commit -m "Workspace created" 
+and last-step       git push     (**send to conciliator.)
+
+
+
+
+PART-3 MIDDLEWARES (Statik Dosyalar)
+write again app.js 
+
+
+
+cconst express = require('express');
+
+const path = require('path');
+
+const app = express();
+
+const myLogger = (req, res, next) => {
+  console.log('Middleware Log 1');
+  next(); //middleware'ler sırayla çalışır o yüzden next çağırtırız.
+};
+
+const myLogger2 = (req, res, next) => {
+  console.log('Middleware Log 2');
+  next(); //middleware'ler sırayla çalışır o yüzden next çağırtırız.
+};
+
+
+//MIDDLEWARES
+
+app.use(express.static('public')); // public içerisindeki statik dosyaları kullan
+
+app.use(myLogger);
+app.use(myLogger2);
+
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'temp/index.html'));
+});
+
+const port = 4500;
+app.listen(port, () => {
+  console.log(`Sunucu ${port}'unda başlatıldı....`);
+});
+
+
+
+and again 
+
+Afterwards, we can send our codes to the remote repo with the git push command.
+write Terminal 'git status'  (**we need save changes files)
+'git add .' (**We want it to add all the files to git.)
+
+and write           git commit -m "Workspace created" 
+and last-step       git push     (**send to conciliator.)
+
+
+
+
+
+
+PART- 4 Template Engine
+
+**template engine sayesinde static html css dosyalarımızı ilgili görselleri okutabiliriz. 
+
+npm i ejs
+
+ardından CleanBlog views dosyasındaki html uzantıları ejs uzantısına çevireceğiz.
+
+and write again code
+
+
+
+
+
+const express = require('express');
+const ejs = require('ejs');
+const path = require('path');
+
+const app = express();
+
+//TEMPLATE ENGINE
+app.set("view engine","ejs");
+
+const myLogger = (req, res, next) => {
+  console.log('Middleware Log 1');
+  next(); //middleware'ler sırayla çalışır o yüzden next çağırtırız.
+};
+
+const myLogger2 = (req, res, next) => {
+  console.log('Middleware Log 2');
+  next(); //middleware'ler sırayla çalışır o yüzden next çağırtırız.
+};
+
+
+//MIDDLEWARES
+
+app.use(express.static('public')); // public içerisindeki statik dosyaları kullan
+
+app.use(myLogger);
+app.use(myLogger2);
+
+app.get('/', (req, res) => {
+  //res.sendFile(path.resolve(__dirname, 'temp/index.html'));
+  res.render('index'); //render methodunu kullanacağız index e işleteceğiz.
+});
+
+const port = 4500;
+app.listen(port, () => {
+  console.log(`Sunucu ${port}'unda başlatıldı....`);
+});
+
+
+
+
+
+
+
+views dosyası içine partials dosyası oluşturacağız ve her ejs dosyasındaki ortak kodları veya satırları tek koda dökeceğiz.örneğin _header.ejs gibi
+
+daha sonra bu oluşturduğumuz partials uzantıları _header.ejs gibi bunları index.ejs about.ejs post.ejs gibi hepsine entegre edeceğiz.
+
+<%- include('partials/_header') -%> şeklinde
+
+
+bunları yapıp diğer kısımlar içinde daha sonra app.get ile add about ları tanımlayıp render etmemiz gerekiyor. response edip
+
+
+_navigation.ejs oluşturduk mesela gitmesi içinde render tanımladığımız adresleri güncelledik mesela index.html yazıyordu onun yerine / yaptık
+mesela about.html yazıyordu onun yerine /about yazdık ve app.js ile yönlendirdik gidişatı sağladık.
+
+
+
+PART- 5 MONGO DB KURULUMU VE mongosh başlanılması
+
+MONGODB CRUD
+
+-mongosh localhost serisine bağlan 
+-showdbs yaz
+-kullanacağın dbyi gir örnek: use pcat-test-db
+-databaseyi yazmaya başla  
+db.photos.insertOne(
+... {title:"Photo 1", description:"Photo description lorem ipsum", qty:20}
+... )
+-ardından oluşturulan databaseyi bul veya seç 
+db.photos.find()
+
+-daha sonra show dbs yazarak kontrol edebiliriz oluşturuldu mu diye ardından show collections diyebiliriz
+- tekrardan 
+db.photos.find()
+- birden daha fazla değer eklemek istersek
+
+db.photos.insertMany([
+... {title:"Photo 2", description:"Photo 2 description", qty:50},
+... {title:"Photo 3", description:"Photo 3 description", qty:150},
+... ])
+
+yazıp enterlıyoruz
+
+- db.photos.find() bunu yazarak tekrardan totalde sonda 3 tane dökümanımızın olduğunu gördük.
+
+- daha sonra title'ı photo 1 olan dökümantasyonu görmek için  db.photos.find({title:"Photo 1"}) yazıyoruz.
+
+- sahip olmayan bir değer girersen bunun gibi db.photos.find({title:"Photo 1", qty:200}) boş döner ve vermez çünkü qty: 200 olan ve photo 1 olana aynı dökümasyon yok
+
+- daha sonra diyelim bir değerin altında ve ya üstünde durumları listelemesi için şunu kullanıız 
+
+db.photos.find(
+... {qty:  {$lt: 200 }}
+... )
+
+$lt belirlenen sayının altında   ,  $gt  ise belirlenen sayının üstündeki değerleri ister.
+
+- limit belirlersek de şu şekilde yapıyor 
+db.photos.find( { qty: { $lt: 200 } } ).limit(2)     ilk karşılaştığı ilk 2 sonucu alır
+
+-Güncelleme yapmak istersek de 
+
+db.photos.updateOne({ title:"Photo 1"},{$set: {qty: 222}})  
+
+db.photos.updateOne({ bulunduğu özelliği seçmek },{$set: {değiştirmek istediğimiz değer}})
+
+- Silmek istediğimizde ise 
+
+db.photos.deleteOne({qty:{$lt:500}})    //qty 500 den aşağısı olan ilk değeri sil
+
+db.photos.deleteOne({silmek istediğimiz değer özelliği})
+
+
+
+--- SON OLARAK DATABASE SİLMEK İÇİN AMA ÖNERİLMİYOR MONGOSH'DAN FAKAT YİNE DE NOT ALIYORUZ 
+
+use pcat-test-db
+db.dropDatabase()
+
+şeklinde yazarsan seçtiğin databasei databaseyi direkt onay almadan SİLER o yüzden buradan silmek önerilmez ve bu kodu yazmamalısın çünkü geri dönüşü YOK 
+o yüzden silmeyi COMPAS'dan yapabilirsin
+
+
+
+-- PART 6 MongooseCRUD
+-vs code açıyoruz ve mongoose kuracağız terminale npm i mongoose yazacağız
+
+-- daha sonra test.js oluşturacaz ve yazacaz 
+
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema; // Schema bir şablon demektir.
+
+//CONNECT db
+
+mongoose.connect('mongodb://localhost/pcat-test-db');
+
+//create schema
+const PhotoSchema = new Schema({
+  title: String, //değerleri string gireceğimiz için belirttik.
+  description: String,
+});
+
+const Photo = mongoose.model('Photo', PhotoSchema);
+
+//create a photo
+Photo.create({
+  title: 'Photo Title 1 ',
+  description: 'Photo description 1 lorem ipsum'
+});
+
+console.log("Database oluşturuldu.");
+
+
+
+
+-- ardından termianlden node test ile çalıştıuracaz ve db oluşmuş olacak
+
+-- Diğer okuma ve silme işlemleri içinde sırayla bu kodlar yazılabilir 
+
+//read a photo
+//Çalışmıyor
+//hocanın kullandığı aşağıdaki kod artık geçerli değildir bu eskide kaldı mongodb'de artık yeni yöntemleri aşağıda
+// Photo.find({}, (err, data) => {
+//   console.log(data);
+// });
+
+//yöntem 1 ;(Çalışıyor)
+// async function readPhotos(){
+//   const photos = await Photo.find({});
+//   console.log(photos);
+// }
+
+// readPhotos();
+
+//yöntem 2 (Çalışıyor)
+// Photo.find({}).then(photo=>{
+//   console.log(photo);
+// });
+
+//Update photo
+
+//const id = '688203779e13a8e395b96cd5';
+
+//Bu eski kod o yüzden çalışmıyor
+// Photo.findByIdAndUpdate(
+//   id,
+//   {
+//     title: 'Photo Title 1 Updated',
+//     description: 'Photo description 1 uploated'
+//   },
+//   (err, data) => {
+//     console.log(data);
+//   }
+// );
+
+
+
+//Yöntem 1 (Çalışıyor)
+
+// async function updatePhoto() {
+//   const id = '688203779e13a8e395b96cd5';
+//   const updatedPhoto = await Photo.findByIdAndUpdate(
+//     id,
+//     {
+//       title: 'Photo Title 1 Updated',
+//       description: 'Photo description 1 updated'
+//     },
+//     { new: true } // Bu, güncellenmiş veriyi döndürmesini sağlar
+//   );
+//   console.log(updatedPhoto);
+// }
+
+// updatePhoto();
+
+
+//Yöntem 2(Çalışıyor)
+// Photo.findByIdAndUpdate(
+//   id,
+//   {
+//     title: 'Photo Title 1 Updated first again',
+//     description: 'Photo description 1 updated first again'
+//   },
+//   { new: true }
+// ).then(updatedPhoto => {
+//   console.log(updatedPhoto);
+// });
+
+//delete a photo
+const id2='688203779e13a8e395b96cd5';
+//Eski kod çalışmıyor 
+// Photo.findByIdAndDelete(id,(err,data)=>{
+//   console.log('Photo is removed...');
+// });
+
+
+
+//Yeni şekli böyle çalışıyor.
+Photo.findByIdAndDelete(id).then(deletephoto=>{
+  console.log('Photo removed....');
+});
+
+-- add sayfasında submit edince girilen değeri yazdırtmak için express'den faydalanacaz
+
+app.use(express.urlencoded({extended:true})); //add sayfasında submit edince girilen değerleri yanıt alamıyor dönüyordu bunu da express ile hallettik. Yani request , response döngüsüne başlıyor bu döngüyü tamamlamamız lazım şimdilik console'a yazdı burası sayesinde.
+app.use(express.json()); // bu iki kod yukaridaki ve bu aldığımız aldığımız requiesti sonlandırmamıza yardımcı oldu.
+//url'deki datayı okumamızı sağlıyor. bu iki kod
+
+
+
+PART-8 MODEL VE DİNAMİK İÇERİK
+-- artık test.js de yaptığımız her şeyi app.js e entegre edebiliriz.
+
+-- app.js e database bağlantılarını ekleyecez.
+
+const mongoose = require('mongoose');
+mongoose.connect(
+  'mongodb://localhost/pcat-test-db'
+);
+
+-- Bir adet models dosyası oluşturualım ve şu kodları yazalım hazır yapı olsun
+
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+//create schema
+const PhotoSchema = new Schema({
+  title: String, //değerleri string gireceğimiz için belirttik.
+  description: String,
+  image: String,
+  dateCreated: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Photo = mongoose.model('Photo', PhotoSchema);
+
+
+module.exports = Photo;
+
+--ardından module ettiğimiz için bu Photo adında bu js dosyasını app.js e entegre edeceğiz 
+
+ const Photo = require('./models/Photo');
+
+--bu oluşturulan modelleri veritabanına göndertmemiz lazım 
+
+app.post('/photos', async  (req, res) => { // tıkanma yaşamamak için async fonksiyona çeviriyoruz.
+  // add.ejs kısmında action olayında POST metodunda photos'a yönlendiriyoruz.
+  await Photo.create(req.body); // request body den gelen veriyi kullanarak oluşturduk.
+  res.redirect('/'); // req,res döngüsünden sonra tamamlayınca anasayfaya dönmesini istiyoruz.
+});
+
+
+-- şimdi gönderilen fotoğrafları göstertebilmek için ve açıklama kısımlarını düzenlemek için her oluşturulan öğeyi databaseden çekmesi için for döngüsüne aldık ve div i for döngüsü içine attık çünkü iskelet yapı o ve o yapıyı kullanmasını istiyorum her oluşturulan üründe 
+
+ <% for (let i=0; i<photos.length; i++) {%>
+
+                             <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
+                            <div class="position-relative tm-thumbnail-container">
+                                <img src="img/tn-01.jpg" alt="Image" class="img-fluid tm-catalog-item-img">    
+                                <a href="video-page.html" class="position-absolute tm-img-overlay">
+                                    <i class="fas fa-play tm-overlay-icon"></i>
+                                </a>
+                            </div>    
+                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
+                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title"><%= photos[i].title %></h3>
+                                <p class="tm-catalog-item-text"><%= photos[i].description %></p>
+                            </div>
+                        </div>
+                       
+                     
+<% } %>
+                        <!--  bunu neden yaptık formasyon iskeelet yapsını kavraması için bu tm-catalog-item div'ini for içerisine aldık ve her oruşturulanı bu şekil yapsın diye -->
+
+
+
+--css kodunda da fotoğraflar yan yana gelmiyordu 
+
+.tm-catalog-item-list { justify-content: spcae-between; }
+
+yerine 
+
+.tm-catalog-item-list { justify-content: start; }
+
+yaptık ve fotoğraflar yan yana gelmeye başladı.
+
+bu part tamamen bu aşamalar ile oldu.
+
+
+
+PART-9 TIKLANILAN FOTOĞRAFLARA AÇIKLAMALI ŞEKİLDE KENDİ SİTELERİNE YÖNLENDİRME 
+-- Bunun için views'e bir adet photo.ejs oluşturduk ve bu dosyaya gerekli template dosyayı düzenleyecez. includes'ları ekliyoruz.
+
+--ardından her fotoğrafa tıkladığımız zaman fotoğrafın aderesini buldurmamız lazım ve id'sini çekmeli bunu da şöyle yapacağız
+
+<a href="/photos/<%= photos[i]._id %>" class="position-absolute tm-img-overlay"> href gidiş yolunu bu şekilde belirteceğiz 
+
+-- daha sonra app.js için kod içerisine app.get ekleyeceğiz yine 
+
+app.get('/photos/:id', async (req, res) => {
+  //console.log(req.params.id);
+  //res.send("Fotoğraf ID'si loglandı");
+  //res.render('about');
+  const photo = await Photo.findById(req.params.id); // bu seçim ile hangi fotoğrafa ait bilgiler varsa o id'den çekiyoruz.
+  res.render('photo', {
+    photo
+  });
+});
+-- adresini photos/:id olarak tanımlayacaz ve id'sini request edip req.params.id ile çekeceğiz
+
+--hemen sonrasında photo.ejs ' de yolları tanımlayacaz yine 
+
+<h2 class="mb-5 tm-video-title"><% =photo.title %></h2>
+								<p class="mb-4"><% =photo.description %></p>	
+
+-- şimdi sayfayı açtığımızda photo.ejs 'yi css kodu yokmuş veya bozulmuş gibi açılacak onun önüne de link olarak yazmadığımız bütün yollara partials'daki / koyacağız.
+
+-- cssmiz de çalışıyor bu noktadan sonra tıklayınca fotoğrafa bilgileri de gözüküyor listede.
+
+
+
+PART-10 FOTOĞRAF YÜKLEME
+-terminalden npm i express-fileupload  i yükledik 
+
+--ardından kodlara 
+const fileUpload = require('express-fileupload');
+
+ -ve middleware olarak 
+ app.use(fileUpload());
+
+ -ekledik ardından html 'de add.ejs için 
+
+ <form method="POST" action="/photos" class="tm-contact-for m"    kısmına 
+
+ <form method="POST" action="/photos" class="tm-contact-for m" encType="multipart/form-data">    burada olduğu gibi enctype ekledik. bu durum formumuza görselimizi eklememizi sağlar.
+
+ --ardından 
+
+app.post('/photos', async  (req, res) => { 
+  await Photo.create(req.body); 
+  res.redirect('/'); 
+});
+ 
+ içine 
+
+ console.log(req.files.image); ekledik  // image yazmamızın sebebi add.ejs'de  
+
+  <div class="form-group">
+    <input type="file" name="image" class="form-control-file rounded-0">
+  </div>
+
+  burada name'si image olmasını
+
+-- burada req.files ile gönderdiğimiz görsellerle ilgili verilere ulaşabiliyoruz.
+
+
+-- kodun yeni hali 
+
+app.post('/photos', async (req, res) => {
+  // tıkanma yaşamamak için async fonksiyona çeviriyoruz.
+  // add.ejs kısmında action olayında POST metodunda photos'a yönlendiriyoruz.
+  //console.log(req.files.image);
+  //await Photo.create(req.body); // request body den gelen veriyi kullanarak oluşturduk.
+  //res.redirect('/'); // req,res döngüsünden sonra tamamlayınca anasayfaya dönmesini istiyoruz.
+
+  const uploadDir = 'public/uploads';
+
+  if (!fs.existsSync(uploadDir)) {
+    //klasörün olup olmadığını kontrol etmek için bunu yazarız başına ! ile eğer yoksa koşulu yaptık
+    fs.mkdirSync(uploadDir);
+  }
+  //bu işlemleri asenkron değil senkron şekilde yapılmasını istedik
+
+  let uploadImage = req.files.image;
+  let uploadPath = __dirname + '/public/uploads/' + uploadImage.name; //__dirname = var olan klasörün kendisini gösterir. // uploads dosyasını public dosyasına kendisi açacak
+
+  uploadImage.mv(uploadPath, async () => {
+    await Photo.create({
+      ...req.body,
+      image: '/uploads/' + uploadImage.name,
+    });
+    res.redirect('/');
+  });
+});
+//Photo nun içine sahip olunan değerler haricinde diğer değerleri ekletiyoruz ...req.body'den sonra
+
+-- ardından yeni bir require ekliyoruz 
+
+const fs = require('fs'); // fs kodu ile artık dosya işlemleri yapılabilir.
+
+--daha sonra app.get içeriğini güncelledik.
+
+const photos = await Photo.find({}) kısmıan şunu ekledik 
+
+ const photos = await Photo.find({}).sort('-dateCreated'); // sort ile zincirleme DatecReated sırası ile sıralamasını istiyoruz fotoları. En son yazılanın en başa gelmesi için başına '-' işareti koyuyoruz.
+
+ ardından 
+
+ index.ejs'de 
+
+ <img src="<%= photos[i].image %>" alt="Image" class="img-fluid tm-catalog-item-img">    düzenledik
+
+ photo.ejs'de de bunu düzenledik 
+
+ <img src="<%= photo.image %>" alt="Image" class="img-fluid tm-catalog-item-img">
+
+
+
+
+
+
+
+ PART-11 FOTOĞRAF BİLGİSİ GÜNCELLEME
+
+ -- Öncelikle bir adet edit.ejs sayfası oluşturucaz ve add.ejs'in aynısını yapacaz update'e tıklanınca fotoğrafta aynı arayüz içinde o fotoğrafa ait bilgilerle beraber adad.ejs'deki format şeklinde karşımıza çıkacak ama kutular dolu şekilde.
+ -- ardından photo.ejs dosyasındaki buton olan Update Photo kısmını butondan a etiketine cevirecez.
+
+ -- Daha sonra edit.ejs içeriğini bu şekilde yapacağız 
+
+  <div class="mx-auto pb-3 tm-about-text-container">
+                        <div class="row">
+                            <div class="col-lg-10 mb-5">
+                                <form method="POST" action="/photos" class="tm-contact-for m" encType="multipart/form-data">
+                                  <div class="form-group">
+                                    <input type="text" name="title" value="<%= photo.title %>" class="form-control rounded-0" placeholder="Photo Title" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <textarea rows="8" name="description" class="form-control rounded-0" placeholder="Photo Description"
+                                              required><%= photo.description %></textarea>
+                                  </div>
+
+
+--ardından app.js dosyasında sayfayı get edip yazdırtacağız
+
+app.get('/photos/edit/:id', async (req, res) => {
+  const photo = await Photo.findOne({_id: req.params.id});
+  res.render('edit', {
+    photo
+  });
+});
+
+--ardından npm i method-override  indireceğiz.
+-- işlemden sonra app.js'ye const methodOverride = require('method-override'); ekleyeceğiz
+--middleware olarak da app.use(methodOverride('_method')); ekliyoruz.
+--edit.ejs içi güncelleme <form method="POST" action="/photos/<%= photo._id %>?_method=PUT" class="tm-contact-for m" encType="multipart/form-data">
+-- daha sonra app.js ekleme yapacaz 
+
+app.put('/photos/:id', async (req, res) => { // tarayıcı ve uygulama tarafını birbirine karıştırmıyoruz içerisinde put kullandık edit.ejs'de put geçecez POST yazıyordu fakat
+  const photo = await Photo.findOne({_id: req.params.id});
+  photo.title = req.body.title;
+  photo.description =req.body.description;
+  photo.save();
+
+  res.redirect(`/photos/${req.params.id}`);
+});
+
+--artık sayfaya her yükleme yapınca ürünü güncelleyebileceğiz.
+
+
+
+
+
+--PART-12 FOTOĞRAF SİLMEK
+
+-- öncelikle photo.ejs dosyasındaki 
+
+<button class="btn btn-danger p-0 tm-btn-animate tm-btn-download tm-icon-download"><span>Delete Photo</span></button>	
+
+button'u a etiketine çevirecez
+
+--href ini de ekledik yukarıdaki yazılan html komutlarına göre FAKAT BU SEFER method PUT yerine DELETE olacak
+<a href="/photos/<%= photo._id %>?_method=DELETE" class="btn btn-danger p-0 tm-btn-animate tm-btn-download tm-icon-download"><span>Delete Photo</span></a>	
+
+-- daha sonra bu DELETE methodunu yakalayacak app.js'de ki kodu yazacağız
+
+app.delete('/photos/:id', (req,res)=> {
+  console.log(req.params.id);
+});
+
+
+-- SOnrasın Hangi methodların overrate edilmesi gerektiğiini yani expressit olarak yani ayrıcı belirtmemeiz gerekiyor o yüzden yanına '_method' yanına ekleyeceğiz.
+
+app.use(methodOverride('_method')) ' un yanina şunu yapacaz : 
+
+app.use(methodOverride('_method', {
+  methods:['POST','GET']
+}));    // bu şekilde olacak
+
+
+-- app.delete'i de güncelleyecez 
+
+app.delete('/photos/:id', async (req,res)=> {
+  //console.log(req.params.id); // terminalden console.log ile ID'Yİ yakalayıp yakalamadığımızı kontrol ediyoruz.
+  await Photo.findByIdAndDelete(req.params.id);
+
+  res.redirect('/'); // işlemden sonra anasayfaya yönlendirmesini sağlıyoruz.
+});
+
+
+-- fakat bu silme işlemini yapsakta public klasörü içindeki uploads klasöründeki footğraflar silinmiyor ve kalıyor.
+
+-- BU İŞLEM haricinde bir silmek için emin olup olma ifadesi koyacağız bir onclick ile  
+
+<a href="/photos/<%= photo._id %>?_method=DELETE" class="btn btn-danger p-0 tm-btn-animate tm-btn-download tm-icon-download" onclick="return confirm('ARE YOU SURE?')"><span>Delete Photo</span></a>	
+
+ --//önce fotoğrafı yakal sonrasıdan o fotoğrafı klasörden sil, sonrasında da o bilgileri veri tabanından sil şeklinde ilerleyeceğiz.
+
+ -- ardından app.delete tekrar güncelledik gerekli işlemler ile sağlamasını yaptık 
+
+ app.delete('/photos/:id', async (req,res)=> {
+  //console.log(req.params.id); // terminalden console.log ile ID'Yİ yakalayıp yakalamadığımızı kontrol ediyoruz.
+  //await Photo.findByIdAndDelete(req.params.id);
+
+  const photo = await Photo.findOne({_id:req.params.id});
+  let deletedImage = __dirname + '/public' + photo.image 
+  //burada kullandığıımız image veritabanındaki    'image:"/uploads/harley_unsplash.jpg"' adresine gidiyor aslında yani bir daha bu adresi yazma gereği yok image diye belirttik. 
+  fs.unlinkSync(deletedImage) // senkron bir işlem yapamsını istedik bu işlemi yapmadan bir alt satıra geçsin istemiyoruz. 
+  await Photo.findByIdAndDelete(req.params.id); // veritabanından da siliyoruz.
+  res.redirect('/'); // işlemden sonra anasayfaya yönlendirmesini sağlıyoruz.
+
+  //önce fotoğrafı yakala sonrasıdan o fotoğrafı klasörden sil, sonrasında da o bilgileri veri tabanından sil şeklinde ilerleyeceğiz.
+});
+
+
+
+
+-- PART-13 REFACTORINGMVS
+
+
+
+--PCAT Dosyamızın içine bir adet controllers dosyası açtık
+--app.js içine aracı yolu belirleyecez
+
+const photoController = require('./controllers/photoControllers');
+
+--ardından içerisine photoControllers.js dosyası olştuurp export edip içindeki fonksiyonu app.js e entegre edeceğiz. Ve fs , Photo... gibi yaptığımız modülleri de yeni oluşturduğumuz Controller.js içlerinde eğer kullanıyorsak kesinlikle tanımlamalıyız.
+
+
+photoControllers.js
+
+
+const Photo = require('../models/Photo');
+const fs = require('fs');
+
+exports.getAllPhotos = async (req, res) => {
+  const photos = await Photo.find({}).sort('-dateCreated'); // sort ile zincirleme DatecReated sırası ile sıralamasını istiyoruz fotoları. En son yazılanın en başa gelmesi için başına '-' işareti koyuyoruz.
+  res.render('index', {
+    photos, // photos:photos diyeceğimiz için direkt photos sadece yazsak yeter
+  });
+};
+
+exports.getPhoto = async (req, res) => {
+  //console.log(req.params.id);
+  //res.send("Fotoğraf ID'si loglandı");
+  //res.render('about');
+  const photo = await Photo.findById(req.params.id); // bu seçim ile hangi fotoğrafa ait bilgiler varsa o id'den çekiyoruz.
+  res.render('photo', {
+    photo,
+  });
+};
+
+exports.createPhoto = async (req, res) => {
+  // tıkanma yaşamamak için async fonksiyona çeviriyoruz.
+  // add.ejs kısmında action olayında POST metodunda photos'a yönlendiriyoruz.
+  //console.log(req.files.image);
+  //await Photo.create(req.body); // request body den gelen veriyi kullanarak oluşturduk.
+  //res.redirect('/'); // req,res döngüsünden sonra tamamlayınca anasayfaya dönmesini istiyoruz.
+
+  const uploadDir = 'public/uploads';
+
+  if (!fs.existsSync(uploadDir)) {
+    //klasörün olup olmadığını kontrol etmek için bunu yazarız başına ! ile eğer yoksa koşulu yaptık
+    fs.mkdirSync(uploadDir);
+  }
+  //bu işlemleri asenkron değil senkron şekilde yapılmasını istedik
+
+  let uploadImage = req.files.image;
+  let uploadPath = __dirname + '/public/uploads/' + uploadImage.name; //__dirname = var olan klasörün kendisini gösterir. // uploads dosyasını public dosyasına kendisi açacak
+
+  uploadImage.mv(uploadPath, async () => {
+    await Photo.create({
+      ...req.body,
+      image: '/uploads/' + uploadImage.name,
+    });
+    res.redirect('/');
+  });
+};
+//Photo nun içine sahip olunan değerler haricinde diğer değerleri ekletiyoruz ...req.body'den sonra
+
+exports.updatePhoto = async (req, res) => {
+  // tarayıcı ve uygulama tarafını birbirine karıştırmıyoruz içerisinde put kullandık edit.ejs'de put geçecez POST yazıyordu fakat
+  const photo = await Photo.findOne({ _id: req.params.id });
+  photo.title = req.body.title;
+  photo.description = req.body.description;
+  photo.save();
+
+  res.redirect(`/photos/${req.params.id}`);
+};
+
+exports.deletePhoto = async (req, res) => {
+  //console.log(req.params.id); // terminalden console.log ile ID'Yİ yakalayıp yakalamadığımızı kontrol ediyoruz.
+  //await Photo.findByIdAndDelete(req.params.id);
+
+  const photo = await Photo.findOne({ _id: req.params.id });
+  let deletedImage = __dirname + '/public' + photo.image;
+  //burada kullandığıımız image veritabanındaki    'image:"/uploads/harley_unsplash.jpg"' adresine gidiyor aslında yani bir daha bu adresi yazma gereği yok image diye belirttik.
+  fs.unlinkSync(deletedImage); // senkron bir işlem yapamsını istedik bu işlemi yapmadan bir alt satıra geçsin istemiyoruz.
+  await Photo.findByIdAndDelete(req.params.id); // veritabanından da siliyoruz.
+  res.redirect('/'); // işlemden sonra anasayfaya yönlendirmesini sağlıyoruz.
+
+  //önce fotoğrafı yakal sonrasıdan o fotoğrafı klasörden sil, sonrasında da o bilgileri veri tabanından sil şeklinde ilerleyeceğiz.
+};
+
+
+
+
+
+app.js
+app.get('/', photoController.getAllPhotos);
+
+app.get('/photos/:id', photoController.getPhoto);
+
+app.post('/photos', photoController.createPhoto);
+
+app.put('/photos/:id', photoController.updatePhoto);
+
+app.delete('/photos/:id', photoController.deletePhoto);
+
+-- bu şekilde photoControllers.js'e app.jsdeki parçaları taşıdık ve export ettik ardından app.js e entegre ederek app.js deki kodu kısalttık ve şemalamış olduk kodları
+
+
+
+--aynı şey için bir adet controlers klasörüne pageController.js açtık. 
+
+--app.js içine  const pageController = require('./controllers/pageController');     ekledik.
+
+
+-- pageController.js içine yazılanlar 
+
+
+exports.getAboutPage = (req, res) => {
+  res.render('about');
+};
+
+exports.getAddPage = (req, res) => {
+  res.render('add');
+};
+
+exports.getEditPage = async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  res.render('edit', {
+    photo,
+  });
+};
+
+
+
+app.js ' e yazılanlar 
+
+
+app.get('/about', pageController.getAboutPage);
+
+app.get('/add', pageController.getAddPage);
+
+app.get('/photos/edit/:id', pageController.getEditPage);
+
+
+-- ÖNEMLİ NOT KESİNLİKLE TANIMLADIĞIM  fs , Photo... gibi yaptığımız modülleri de yeni oluşturduğumuz Controller.js içlerinde eğer kullanıyorsak kesinlikle tanımlamalıyız.
+
+-- __dirname içinde hata alacağız o yüzden düzeltmek için 
+
+eskisi
+let uploadPath = __dirname + '/public/uploads/' + uploadImage.name; //__dirname = var olan klasörün kendisini gösterir. // uploads dosyasını public dosyasına kendisi açacak
+
+'/public/uploads/'  yerine '/../public/uploads/' yapacağız. 
+
+yenisi
+let uploadPath = __dirname + '/../public/uploads/' + uploadImage.name; //__dirname = var olan klasörün kendisini gösterir. // uploads dosyasını public dosyasına kendisi açacak
+
+
+--aynısını delete kısmı içinde yapacağız.
+
+
+--app.js'de artık işimize yaramayanlar var kullanmadığımız için bunları silecez 
+
+const fs = require('fs'); // fs kodu ile artık dosya işlemleri yapılabilir.
+const Photo = require('./models/Photo');
+const path = require('path');
+
+
+--pageController içine de 
+
+const Photo = require('../models/Photo');
+
+Photo'yu import etmemiz lazım
+
+
+
+
+
+--PART 14 Pagination 
+
+--Şimdi sayfa içinde ana sayfada sergilenen fotoğraflara limit koyacaz ve kendi pageleri olacak tek page'De 2 fotoğraf olacak ve sıradaki fotoğrafları görmek için bir sonraki page e gideceğiz 
+bunun içinde şu photoControllers.js kodunu tekrar düzenliyoruz
+
+exports.getAllPhotos = async (req, res) => {
+  const page = req.query.page || 1 ;  // sayfayı seç yada seçilmiyorsa 1 den başlat 
+  const photosPerPage = 2; // her sayfada 2 adet fotoğraf olmasını istyioruz
+
+  const totalPhotos = await Photo.find().countDocuments(); //  bu şekilde toplam fotoğrafları yakaladık . 
+  console.log(totalPhotos);
+  const photos = await Photo.find({})
+  .sort('-dateCreated')
+  .skip((page-1)*photosPerPage) // pas geçmesi gereken fotoğraf adetlerini söylüyoruz
+  .limit(photosPerPage); // her sayfada göstermek istediğimiz fotoğraf limiti
+
+
+  res.render('index' , {
+    photos:photos,
+    current: page,
+    pages: Math.ceil(totalPhotos / photosPerPage)
+  });
+ 
+};
+
+-- ardından anasayfa yani index.ejs için bir koşul yazacaz
+
+  <div>
+                       <% if(pages >0 ){ %>
+
+                        
+                        <ul class="nav tm-paging-links">
+                            <li class="nav-item active"><a href="#" class="nav-link tm-paging-link">1</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">2</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">3</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">4</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">></a></li>
+                        </ul>
+                    </div>
+
+                   <% } %>
+
+                   -- if 'i yazarak koşul oluşturduk o zaman çıkacak
+
+
+-- en son güncellenmeiş hali böyle ve istediğimiz adedi pagination ile sıralandırıp olutşurabiliyoruz 
+
+  <div>
+                       <% if(pages >0 ){ %>
+
+                        
+                        <ul class="nav tm-paging-links">
+                            
+                            <% for (i=1 ; i<=pages; i++){ %>
+
+                                <% if (i == current) { %>
+                                    <li class="nav-item active"><a href="/?page=<%= i %>" class="nav-link tm-paging-link"><%= i %></a></li> 
+                                     <!-- burada değişken olduğu için <% i %> yerine <%= i %> = eşittir koyduk -->
+                                <%  } else if(i < pages){ %>
+                                
+                                    <li class="nav-item "><a href="/?page=<%= i %>" class="nav-link tm-paging-link"><%= i %></a></li>
+                                
+                                <% }else{ %>
+                                    <li class="nav-item "><a href="/?page=<%= i %>" class="nav-link tm-paging-link">></a></li>
+                                <% } %> 
+                           <% } %>
+                        </ul>
+
+                        <% } %>
+                    </div>
+
+
+
+
+
+
+
+
+-- PART-15 HEROKU & MONGODB
+-- Şimdi Mongodb girip webten ardından hesap açacağız ve açtığımız hesap ile ücretsiz erişimden faydalanacağız proje oluşturup 1 adet Create cluster oluşturacağız
+
+
+
+--NOT HEROKU ücretli olduğu için deneyemedik o yüzden videoyu uygulayamadık 
+
+--fakat yapılacaklar  package.json içersindeki bu dosyadan test kısmı silinecek ve nodemon app.js yerine node app.js olacak.
+
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+                    
